@@ -1,8 +1,310 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
   <title>Complexity Labs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Complexity Labs — developer-first AI governance & compliance tooling (EU AI Act ready)." />
+  <style>
+    :root{
+      /* Palette sampled from your assets */
+      --blue:#0B57CF;         /* primary blue */
+      --blue-dark:#0A3E99;    /* darker hover */
+      --teal:#17B0B5;         /* accent/circle fill */
+      --ink:#15325b;          /* deep text */
+      --bg:#ffffff;           /* page bg */
+      --bg-soft:#f6f8fc;      /* soft section bg */
+      --border:#d6e3ff;       /* light border */
+      --shadow:0 6px 24px rgba(11,87,207,0.12);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--ink); background:var(--bg);
+      line-height:1.6;
+    }
+
+    /* Navbar */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(8px);
+      background:rgba(255,255,255,0.8);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-wrap{
+      max-width:1100px; margin:auto; padding:10px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink);
+      font-weight:700; letter-spacing:0.2px;
+    }
+    .brand img{width:36px; height:36px}
+    .links{display:flex; gap:18px}
+    .links a{
+      text-decoration:none; color:var(--ink); font-weight:600; opacity:.85;
+      padding:8px 10px; border-radius:8px;
+    }
+    .links a:hover{background:var(--bg-soft); opacity:1}
+
+    /* Hero */
+    .hero{
+      max-width:1100px; margin:0 auto; padding:48px 16px 24px;
+      display:grid; grid-template-columns:1.2fr; place-items:center; text-align:center;
+    }
+    .tagline{
+      font-size: clamp(22px, 4vw, 42px);
+      font-weight:800; color:var(--blue); margin:18px 0 8px;
+      transform-origin: center top;
+      transition: transform .9s cubic-bezier(.22,1,.36,1), opacity .9s;
+    }
+    .sub{
+      max-width:800px; margin:0 auto 22px; opacity:.9
+    }
+    .banner{
+      width:min(900px,92vw); height:auto; display:block; margin:16px auto 6px;
+      filter: drop-shadow(var(--shadow));
+      opacity:0; transform: translateY(12px) scale(.98);
+      transition: opacity .9s, transform .9s;
+    }
+    .logo-orbit{
+      position:relative; width:min(140px,28vw); height:min(140px,28vw);
+      margin:22px auto 0; perspective:800px;
+    }
+    .logo-orbit img{
+      width:100%; height:100%; display:block; transform-style:preserve-3d;
+      animation: spin3d 10s linear infinite; opacity:.95;
+      filter: drop-shadow(0 8px 24px rgba(23,176,181,.25));
+    }
+    @keyframes spin3d{
+      0%{transform: rotateX(0) rotateY(0)}
+      50%{transform: rotateX(15deg) rotateY(180deg)}
+      100%{transform: rotateX(0) rotateY(360deg)}
+    }
+
+    /* Sections */
+    section{padding:64px 16px}
+    .wrap{max-width:1000px; margin:0 auto}
+    h2{
+      font-size: clamp(22px, 3.2vw, 34px);
+      margin:0 0 12px; color:var(--blue);
+    }
+    .card{
+      background:var(--bg-soft); border:1px solid var(--border);
+      border-radius:16px; padding:24px; box-shadow: var(--shadow);
+    }
+
+    /* Waitlist form */
+    .form{
+      display:flex; flex-direction:column; gap:12px; max-width:520px;
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    input[type="email"]{
+      flex:1 1 260px; padding:12px 14px; border:1px solid var(--border);
+      border-radius:12px; font-size:16px; outline:none;
+    }
+    input[type="email"]:focus{border-color:var(--blue)}
+    button{
+      background:var(--blue); color:white; border:none; padding:12px 18px;
+      border-radius:12px; font-weight:700; cursor:pointer;
+      box-shadow: 0 6px 16px rgba(11,87,207,.25);
+    }
+    button:hover{background:var(--blue-dark)}
+    .help{font-size:13px; opacity:.8}
+    .ok{color:#0a7f3f}
+    .err{color:#b00020}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0; transform: translateY(16px); transition: opacity .7s, transform .7s}
+    .reveal.in{opacity:1; transform:none}
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border); padding:28px 16px; background:#fff;
+      text-align:center;
+    }
+    footer a{color:var(--blue); font-weight:800; text-decoration:none}
+    footer a:hover{text-decoration:underline}
+
+    /* Small screens */
+    @media (max-width:700px){
+      .links{display:none} /* keep it simple: hide links on very small screens */
+      .hero{padding-top:32px}
+    }
+  </style>
 </head>
 <body>
-Complexity Labs
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-wrap">
+      <a class="brand" href="#top" aria-label="Complexity Labs home">
+        <img src="logo.png" alt="Complexity Labs logo" />
+        <span>Complexity Labs</span>
+      </a>
+      <div class="links" role="navigation" aria-label="Primary">
+        <a href="#hero">Hero</a>
+        <a href="#about">About</a>
+        <a href="#alignment">AI Alignment</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header id="hero" class="hero">
+    <h1 class="tagline" id="tagline">We solve intractable problems.</h1>
+    <p class="sub reveal">Developer-first AI governance & compliance. Practical, theory-backed tooling to help teams meet the EU AI Act with confidence.</p>
+    <img class="banner" id="banner" src="banner.png" alt="Complexity Labs banner" />
+    <div class="logo-orbit reveal">
+      <img src="logo.png" alt="Rotating logo accent" />
+    </div>
+  </header>
+
+  <!-- Company Overview -->
+  <section id="about">
+    <div class="wrap">
+      <h2 class="reveal">Problem-First. Outcome-Driven.</h2>
+      <div class="card reveal">
+        <p>
+          Complexity Labs forms small, interdisciplinary “labs” that pair scientists, engineers, and product thinkers to stare at hard problems and refuse to blink. 
+          Instead of chasing features, we commit to verifiable outcomes—shipping concrete wins where rigorous theory meets pragmatic engineering.
+        </p>
+        <p>
+          Our first focus: governance for AI systems. We bring a complexity-theoretic lens—robust guarantees, transparent assumptions, and developer-centric APIs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Alignment / Safety SDK -->
+  <section id="alignment" style="background:var(--bg-soft)">
+    <div class="wrap">
+      <h2 class="reveal" style="text-align:center">The AI Alignment Problem</h2>
+      <div class="card reveal">
+        <p>
+          Alignment is not just philosophy—it’s engineering under constraints. Real teams must ship safe behavior, trace decisions, and pass audits. 
+          Our approach embraces defense-in-depth: testing, monitoring, documentation, and policy enforcement that map cleanly to obligations in the
+          <strong>EU AI Act</strong>.
+        </p>
+
+        <h3 style="margin-top:18px;color:var(--blue)">Safety-SDK for AI Developers</h3>
+        <ul>
+          <li>Policy checks & attestations aligned to EU AI Act articles</li>
+          <li>Dataset + model provenance, risk registers, and evaluation hooks</li>
+          <li>Clear, auditable controls—built for CI/CD and data workflows</li>
+        </ul>
+
+        <!-- Waitlist form -->
+        <form id="waitlist" class="form" novalidate>
+          <label for="email"><strong>Join the Safety-SDK waitlist</strong></label>
+          <div class="row">
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                   placeholder="you@example.com" aria-describedby="emailHelp"
+                   maxlength="120" required />
+            <button id="submitBtn" type="submit">Sign Up</button>
+          </div>
+          <div id="emailHelp" class="help">We’ll use your email only to share SDK access and updates.</div>
+          <div id="msg" class="help" role="status" aria-live="polite"></div>
+        </form>
+
+        <p class="help" style="margin-top:14px">
+          <em>Note:</em> This demo page performs client-side validation (format, length) and basic sanitization to reduce XSS risk in the UI. 
+          For production, pair with server-side validation on your chosen endpoint.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="wrap">
+      <h2 class="reveal">Contact</h2>
+      <div class="card reveal">
+        <p>Questions, pilots, or collaboration inquiries? We’d love to talk.</p>
+        <p>
+          Email us at
+          <a href="mailto:contact@complexitylabs.co">contact@complexitylabs.co</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Complexity Labs ·
+    <a href="mailto:contact@complexitylabs.co">contact@complexitylabs.co</a>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Hero animation sequence: shrink tagline, reveal banner
+    window.addEventListener('load', () => {
+      const t = document.getElementById('tagline');
+      const b = document.getElementById('banner');
+      // Shrink/raise tagline after a brief delay
+      setTimeout(() => { t.style.transform = 'scale(.92) translateY(-6px)'; t.style.opacity = '0.98'; }, 250);
+      // Reveal banner
+      setTimeout(() => { b.style.opacity = '1'; b.style.transform = 'translateY(0) scale(1)'; }, 450);
+    });
+
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in'); }
+      });
+    }, {threshold:.16});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // Basic XSS-safe text setter
+    function setTextSafe(el, txt){
+      el.textContent = String(txt ?? '');
+    }
+
+    // Email validation
+    function validEmail(v){
+      // Simple robust pattern without catastrophic backtracking
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return re.test(v);
+    }
+
+    // Waitlist handler (client-only). Replace POST URL with your endpoint if desired.
+    const form = document.getElementById('waitlist');
+    const emailInput = document.getElementById('email');
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      setTextSafe(msg, '');
+      const email = emailInput.value.trim();
+
+      // Length cap + format check
+      if(email.length === 0){ setTextSafe(msg, 'Please enter your email.'); msg.className='help err'; return; }
+      if(email.length > 120){ setTextSafe(msg, 'Email is too long.'); msg.className='help err'; return; }
+      if(!validEmail(email)){ setTextSafe(msg, 'Please enter a valid email address.'); msg.className='help err'; return; }
+
+      // Disable button to prevent double submits
+      btn.disabled = true; btn.textContent = 'Submitting…';
+
+      // Demo: no server. If you want to collect emails today, replace the URL below
+      // with a Formspree endpoint or similar. We still show success UX locally.
+      try{
+        // Fake async for UX; comment out if wiring to a real endpoint.
+        await new Promise(r=>setTimeout(r, 700));
+        setTextSafe(msg, 'Thanks! You’re on the list. We’ll be in touch soon.');
+        msg.className='help ok';
+        emailInput.value='';
+      }catch(err){
+        setTextSafe(msg, 'Something went wrong. Please email us directly.');
+        msg.className='help err';
+      }finally{
+        btn.disabled = false; btn.textContent = 'Sign Up';
+      }
+    });
+  </script>
 </body>
 </html>
